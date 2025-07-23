@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kavach</title>
+  <link rel="stylesheet" href="../css/popup.css">
+  <style>
+    /* Base styles */
+    :root {
+      --primary-color: black;
+      --primary-light: #fff5f5;
+      --primary-dark: #003fec;
+      --accent-color: #2196f3;
+      --success-color: #4caf50;
+      --warning-color: #ff9800;
+      --error-color: #f44336;
+      --text-color: #333;
+      --text-light: #666;
+      --bg-color: #f5f7fa;
+      --card-bg: #ffffff;
+      --border-color: #eaeaea;
+      --shadow: 0 2px 8px rgba(0,0,0,0.08);
+      --border-radius: 10px;
+      --danger-color: #E53935;
+      --text-secondary: #757575;
+      --background-light: #f5f5f5;
+      --card-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      width: 360px;
+      overflow-x: hidden;
+    }
+
+    .container {
+      padding: 0;
+    }
+
+    /* Header styles */
+    header {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: linear-gradient(  #8a2be2 100%);
+      color: white;
+      border-bottom: none;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      width: 24px;
+      height: 24px;
+      margin-right: 10px;
+      border-radius: 6px;
+    }
+
+    .logo h1 {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+      color: white;
+    }
+
+    .current-site {
+      margin-left: 16px;
+      flex: 1;
+    }
+
+    #site-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #site-domain {
+      font-weight: 500;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 150px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Header actions */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+    }
+
+    .icon-button {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .icon-button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+
+    /* Safety score styles */
+    .site-safety {
+      display: flex;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    .safety-indicator {
+      position: relative;
+      margin-right: 8px;
+    }
+
+    .safety-indicator svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .score-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.2);
+      stroke-width: 3;
+    }
+
+    .score-fill {
+      fill: none;
+      stroke-width: 3;
+      stroke-linecap: round;
+      transform: rotate(90deg);
+      transform-origin: center;
+      transition: stroke-dasharray 0.8s ease;
+    }
+
+    #safety-score {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 11px;
+      font-weight: bold;
+      color: white;
+    }
+
+    #safety-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Main content styles */
+    main {
+      padding: 16px;
+    }
+
+    /* Toggle section styles */
+    .toggle-section {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .toggle-container {
+      padding: 8px 16px;
+    }
+
+    .toggle-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .toggle-item:last-child {
+      border-bottom: none;
+    }
+
+    .toggle-item span {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    /* Toggle switch styles */
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #e4e4e4;
+      transition: .3s;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .3s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary-color);
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px var(--primary-color);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
+    .slider.round {
+      border-radius: 26px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    /* Proxy toggle container styles */
+    #proxy-toggle-container {
+      background-color: #fff1f1;
+      border: 1px solid rgba(144, 58, 5, 0.15);
+      padding: 14px !important;
+      border-radius: 10px;
+      margin: 16px 0 8px;
+      box-shadow: 0 2px 8px rgba(144, 58, 58, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    #proxy-toggle-container:hover {
+      box-shadow: 0 4px 12px rgba(144, 58, 58, 0.12);
+    }
+
+    #proxy-toggle-container p {
+      font-size: 13px !important;
+      margin: 6px 0 0 0;
+      color: var(--text-light);
+      max-width: 220px;
+      line-height: 1.5;
+    }
+
+    .secondary-btn {
+      background-color: rgba(144, 58, 58, 0.08);
+      color: var(--primary-color);
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .secondary-btn:hover {
+      background-color: rgba(144, 58, 58, 0.15);
+      transform: translateY(-1px);
+    }
+
+    /* Stats section styles */
+    .stats-section {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .stats-section h2 {
+      font-size: 17px;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: var(--text-dark);
+    }
+
+    .stats-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-radius: 8px;
+      transition: background-color 0.2s;
+    }
+
+    .stat-item:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .stat-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background-color: #f5f5f5;
+      margin-right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .stat-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-title {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    .stat-value {
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    /* Footer styles */
+    footer {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .primary-btn {
+      background: linear-gradient(to right, #903a3a, #702a2a);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 3px 6px rgba(144, 58, 58, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    .primary-btn:hover {
+      background: linear-gradient(to right, #833434, #632626);
+      box-shadow: 0 4px 8px rgba(144, 58, 58, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .site-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .site-controls .secondary-btn {
+      flex: 1;
+      padding: 12px;
+      font-size: 14px;
+      background-color: #f0f0f0;
+      color: var(--text-color);
+      border-radius: 8px;
+    }
+
+    .site-controls .secondary-btn:hover {
+      background-color: #e0e0e0;
+    }
+
+    /* Chatbot styles */
+    #chatbot-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #903a3a 0%, #702a2a 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      border: none;
+      z-index: 1000;
+      font-size: 22px;
+      transition: all 0.2s ease;
+    }
+
+    #chatbot-toggle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    #chatbot-panel {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 300px;
+      height: 400px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      z-index: 999;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    
+    #chatbot-panel.visible {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+    
+    .chatbot-header {
+      background-color: #903a3a;
+      color: white;
+      padding: 12px 16px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chatbot-close {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    #chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chat-message {
+      padding: 8px 12px;
+      border-radius: 12px;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+    
+    .chat-message.bot {
+      align-self: flex-start;
+      background-color: #f1f1f1;
+    }
+    
+    .chat-message.user {
+      align-self: flex-end;
+      background-color: #903a3a;
+      color: white;
+    }
+    
+    .chat-message.loading {
+      background-color: #f1f1f1;
+      color: #666;
+      font-style: italic;
+    }
+
+    .chatbot-input-container {
+      display: flex;
+      padding: 8px;
+      border-top: 1px solid #eee;
+    }
+
+    #chatbot-input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      margin-right: 8px;
+    }
+
+    #chatbot-send {
+      background-color: #903a3a;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Action buttons styles */
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0;
+      padding: 0 16px;
+    }
+    
+    .action-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background-color: var(--background-light);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-color);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .action-button:hover {
+      background-color: #e8e8e8;
+      border-color: #ccc;
+    }
+    
+    .action-button svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+    
+    #setup-protonvpn {
+      background-color: #8a2be2;
+      color: white;
+      border-color: #6a1ca0;
+    }
+    
+    #setup-protonvpn:hover {
+      background-color: #7722bb;
+    }
+    
+    #block-site {
+      background-color: var(--danger-color);
+      color: white;
+      border-color: #c62828;
+    }
+    
+    #block-site:hover {
+      background-color: #d32f2f;
+    }
+
+    /* Add notification styles */
+    .popup-notification {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #333;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      max-width: 80%;
+      text-align: center;
+      animation: fadeIn 0.3s, fadeOut 0.3s 2.7s;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; bottom: 0; }
+      to { opacity: 1; bottom: 10px; }
+    }
+    
+    @keyframes fadeOut {
+      from { opacity: 1; bottom: 10px; }
+      to { opacity: 0; bottom: 0; }
+    }
+  </style>
+  <!-- Add chatbot service script first so it's available to popup.js -->
+  <script src="../js/chatbot-service.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <img src="../icons/icon16.jpeg" alt="logo">
+        <h1>Cyberaksha</h1>
+      </div>
+      <div class="current-site">
+        <div id="site-info">
+          <span id="site-domain">example.com</span>
+          <div class="site-safety">
+            <div class="safety-indicator">
+              <div id="safety-score-ring">
+                <svg viewBox="0 0 36 36">
+                  <path class="score-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                  <path id="safety-score-path" class="score-fill" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                </svg>
+                <span id="safety-score">--</span>
+              </div>
+            </div>
+            <span id="safety-text">Calculating safety...</span>
+          </div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="privacy-settings-btn" title="Privacy Network Settings" class="icon-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+    
+    <main>
+      <section class="toggle-section">
+        <div class="toggle-container">
+          <div class="toggle-item">
+            <span>Ad Blocking</span>
+            <label class="toggle">
+              <input type="checkbox" id="adBlocking" checked>
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="toggle-item">
+            <span>HTTPS Upgrade</span>
+            <label class="toggle">
+              <input type="checkbox" id="httpsUpgrade" checked>
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="toggle-item">
+            <span>Anti-Fingerprinting</span>
+            <label class="toggle">
+              <input type="checkbox" id="antiFingerprinting" checked>
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="toggle-item">
+            <span>JavaScript Control</span>
+            <label class="toggle">
+              <input type="checkbox" id="javascriptControl">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <!-- Proxy Mode Toggle - Hidden by default, shown for low safety scores -->
+          <div class="toggle-item" id="proxy-toggle-container" style="display: none; background-color: #ffe8e8; padding: 8px; border-radius: 6px; margin-top: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+              <div>
+                <span style="font-weight: bold;">Secure Proxy Mode</span>
+                <p style="font-size: 11px; margin: 3px 0 0 0; max-width: 200px;">Route traffic through Tor for enhanced privacy on this site</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="proxyModeToggle">
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div style="text-align: right; margin-top: 5px;">
+              <button id="proxy-settings" class="secondary-btn" style="font-size: 11px; padding: 3px 8px;">Configure Proxy</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <section class="stats-section">
+        <h2>Protection Statistics</h2>
+        <div class="stats-container">
+          <div class="stat-item">
+            <div class="stat-icon ads"></div>
+            <div class="stat-text">
+              <span class="stat-title">Ads Blocked</span>
+              <span id="ads-blocked" class="stat-value">0</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon trackers"></div>
+            <div class="stat-text">
+              <span class="stat-title">Trackers Blocked</span>
+              <span id="trackers-blocked" class="stat-value">0</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon https"></div>
+            <div class="stat-text">
+              <span class="stat-title">HTTPS Upgrades</span>
+              <span id="https-upgrades" class="stat-value">0</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon fingerprint"></div>
+            <div class="stat-text">
+              <span class="stat-title">Fingerprinting Attempts</span>
+              <span id="fingerprinting-attempts" class="stat-value">0</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <div id="security-actions" class="action-buttons">
+        <button id="configure-proxy" class="action-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="3" y1="9" x2="21" y2="9"></line>
+            <line x1="9" y1="21" x2="9" y2="9"></line>
+          </svg>
+          Configure Proxy
+        </button>
+        
+        <button id="setup-shield-vpn" class="action-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          Setup Shield VPN
+        </button>
+        
+        <button id="check-vpn" class="action-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          Check VPN
+        </button>
+        
+        <button id="block-site" class="action-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"></path>
+          </svg>
+          Block Site
+        </button>
+      </div>
+
+      <!-- Safety Score Details (hidden by default) -->
+      <div id="score-details-panel" class="toggle-section score-details" style="display: none;">
+        <div class="section-header">
+          <h2>Safety Score Breakdown</h2>
+        </div>
+        <div class="score-details-container">
+          <div class="score-summary">
+            <div class="detailed-score">
+              <div class="score-circle">
+                <span id="detailed-score-value">0</span>
+              </div>
+              <span id="detailed-score-label">-</span>
+            </div>
+            <div class="score-explanation" id="score-explanation">
+              Safety score is calculated based on multiple factors including HTTPS encryption, domain reputation, and absence of malicious content.
+            </div>
+          </div>
+          
+          <div class="score-components">
+            <div class="component-item" id="https-component">
+              <span class="component-label">HTTPS:</span>
+              <div class="component-bar-container">
+                <div class="component-bar" style="width: 0%"></div>
+              </div>
+              <span class="component-value">-</span>
+            </div>
+            <div class="component-item" id="domain-component">
+              <span class="component-label">Domain:</span>
+              <div class="component-bar-container">
+                <div class="component-bar" style="width: 0%"></div>
+              </div>
+              <span class="component-value">-</span>
+            </div>
+            <div class="component-item" id="tld-component">
+              <span class="component-label">TLD:</span>
+              <div class="component-bar-container">
+                <div class="component-bar" style="width: 0%"></div>
+              </div>
+              <span class="component-value">-</span>
+            </div>
+            <div class="component-item" id="trackers-component">
+              <span class="component-label">Trackers:</span>
+              <div class="component-bar-container">
+                <div class="component-bar" style="width: 0%"></div>
+              </div>
+              <span class="component-value">-</span>
+            </div>
+            <div class="component-item" id="phishing-component">
+              <span class="component-label">Phishing:</span>
+              <div class="component-bar-container">
+                <div class="component-bar" style="width: 0%"></div>
+              </div>
+              <span class="component-value">-</span>
+            </div>
+          </div>
+          
+          <button id="score-details-close" class="btn secondary">Close</button>
+        </div>
+      </div>
+    </main>
+    
+    <footer>
+      <button id="open-dashboard" class="primary-btn">Open Dashboard</button>
+      <div class="site-controls">
+        <button id="site-settings" class="secondary-btn">Site Settings</button>
+        <button id="clear-data" class="secondary-btn">Clear Data</button>
+      </div>
+    </footer>
+  </div>
+  
+  <!-- Chatbot UI -->
+  <button id="chatbot-toggle" title="Security Assistant">💬</button>
+  
+  <div id="chatbot-panel">
+    <div class="chatbot-header">
+      <span>Security Assistant</span>
+      <button class="chatbot-close" id="chatbot-close">×</button>
+    </div>
+    <div id="chatbot-messages">
+      <!-- Messages will be added here dynamically -->
+    </div>
+    <div class="chatbot-input-container">
+      <input type="text" id="chatbot-input" placeholder="Ask about security...">
+      <button id="chatbot-send">→</button>
+    </div>
+  </div>
+  
+  <!-- Load main popup script after DOM is fully loaded -->
+  <script src="../js/popup.js"></script>
+</body>
+</html> 

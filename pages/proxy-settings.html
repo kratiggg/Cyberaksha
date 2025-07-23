@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Network Settings - Shield</title>
+  <link rel="stylesheet" href="../css/popup.css">
+  <style>
+    /* Base styles */
+    :root {
+      --primary-color: #ff0101;
+      --primary-light: #fff5f5;
+      --primary-dark: #fc0b0b;
+      --accent-color: #2196f3;
+      --success-color: #4caf50;
+      --warning-color: #ff9800;
+      --error-color: #f44336;
+      --text-color: #333;
+      --text-light: #666;
+      --text-dark: #222;
+      --bg-color: #f5f7fa;
+      --card-bg: #ffffff;
+      --border-color: #eaeaea;
+      --shadow: 0 2px 10px rgba(0,0,0,0.05);
+      --shadow-hover: 0 5px 15px rgba(0,0,0,0.1);
+      --border-radius: 10px;
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --spacing-xl: 32px;
+    }
+    
+    body {
+      padding: 0;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.5;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: var(--spacing-lg);
+    }
+    
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: var(--spacing-xl);
+      background: linear-gradient(135deg, #903a3a 0%, #732e2e 100%);
+      margin: -24px -24px 24px -24px;
+      padding: 24px;
+      color: white;
+      border-radius: 10px 10px 0 0;
+    }
+    
+    .header img {
+      width: 36px;
+      height: 36px;
+      margin-right: var(--spacing-md);
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+    
+    h1 {
+      color: white;
+      margin: 0;
+      font-size: 28px;
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+    
+    h2 {
+      margin-top: 0;
+      color: var(--text-dark);
+      font-size: 20px;
+      font-weight: 600;
+    }
+    
+    .card {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: var(--spacing-xl);
+      margin-bottom: var(--spacing-lg);
+      border: 1px solid var(--border-color);
+      transition: box-shadow 0.2s ease-in-out;
+    }
+    
+    .card:hover {
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .form-group {
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    label {
+      display: block;
+      margin-bottom: var(--spacing-sm);
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+    
+    input[type="text"], input[type="password"], select {
+      width: 100%;
+      padding: 12px var(--spacing-md);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      font-size: 15px;
+      background-color: white;
+      color: var(--text-color);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    
+    input[type="text"]:focus, input[type="password"]:focus, select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(144, 58, 58, 0.15);
+    }
+    
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--spacing-md);
+      padding: var(--spacing-sm) 0;
+    }
+    
+    .toggle-container label {
+      margin-bottom: 0;
+      font-weight: 500;
+    }
+    
+    .button-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-xl);
+    }
+    
+    button {
+      padding: 12px var(--spacing-lg);
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    button:active {
+      transform: translateY(1px);
+    }
+    
+    .primary-btn {
+      background: linear-gradient(to right, #903a3a, #702a2a);
+      color: white;
+      box-shadow: 0 3px 6px rgba(144, 58, 58, 0.2);
+    }
+    
+    .primary-btn:hover {
+      background: linear-gradient(to right, #833434, #632626);
+      box-shadow: 0 4px 8px rgba(144, 58, 58, 0.3);
+      transform: translateY(-1px);
+    }
+    
+    .secondary-btn {
+      background-color: #f0f0f0;
+      color: var(--text-color);
+    }
+    
+    .secondary-btn:hover {
+      background-color: #e0e0e0;
+    }
+    
+    .info-box, .warning-box, .success-box {
+      padding: var(--spacing-md) var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+      border-radius: var(--border-radius);
+      display: flex;
+      align-items: center;
+    }
+    
+    .info-box::before, .warning-box::before, .success-box::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      margin-right: var(--spacing-md);
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      flex-shrink: 0;
+    }
+    
+    .info-box {
+      background-color: #e3f2fd;
+      border-left: 4px solid var(--accent-color);
+    }
+    
+    .info-box::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232196f3'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E");
+    }
+    
+    .warning-box {
+      background-color: #fff8e1;
+      border-left: 4px solid var(--warning-color);
+    }
+    
+    .warning-box::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff9800'%3E%3Cpath d='M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z'/%3E%3C/svg%3E");
+    }
+    
+    .success-box {
+      background-color: #e8f5e9;
+      border-left: 4px solid var(--success-color);
+    }
+    
+    .success-box::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234caf50'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+    }
+    
+    .network-option {
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: var(--spacing-lg);
+      margin-bottom: var(--spacing-md);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    
+    .network-option:hover {
+      border-color: var(--primary-color);
+      background-color: var(--primary-light);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .network-option.selected {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 1px var(--primary-color), 0 3px 10px rgba(144, 58, 58, 0.15);
+      background-color: var(--primary-light);
+    }
+    
+    .network-option .radio-indicator {
+      position: absolute;
+      top: var(--spacing-lg);
+      right: var(--spacing-lg);
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #ddd;
+      background-color: white;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .network-option.selected .radio-indicator {
+      border-color: var(--primary-color);
+      background-color: white;
+    }
+    
+    .network-option.selected .radio-indicator:after {
+      content: '';
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .network-option h3 {
+      margin-top: 0;
+      margin-bottom: var(--spacing-xs);
+      display: flex;
+      align-items: center;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+    
+    .network-option p {
+      margin: 0;
+      color: var(--text-light);
+      font-size: 14px;
+      padding-right: 40px;
+      line-height: 1.5;
+    }
+    
+    .network-details {
+      margin-top: var(--spacing-lg);
+      padding-top: var(--spacing-lg);
+      border-top: 1px solid rgba(0,0,0,0.08);
+      display: none;
+    }
+    
+    .network-option.selected .network-details {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .tab-navigation {
+      display: flex;
+      margin-bottom: var(--spacing-lg);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      background-color: var(--bg-color);
+      z-index: 10;
+      padding-top: var(--spacing-md);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    
+    .tab-button {
+      padding: var(--spacing-md) var(--spacing-lg);
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-light);
+      transition: all 0.2s ease;
+    }
+    
+    .tab-button:hover {
+      color: var(--primary-color);
+    }
+    
+    .tab-button.active {
+      color: var(--primary-color);
+      border-bottom-color: var(--primary-color);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    .status-indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: var(--spacing-sm);
+      position: relative;
+    }
+    
+    .status-indicator.active {
+      background-color: var(--success-color);
+    }
+    
+    .status-indicator.active::after {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background-color: rgba(76, 175, 80, 0.3);
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.5; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .status-indicator.inactive {
+      background-color: var(--error-color);
+    }
+    
+    .status-indicator.warning {
+      background-color: var(--warning-color);
+    }
+    
+    .section-subtitle {
+      color: var(--text-light);
+      font-weight: normal;
+      font-size: 15px;
+      margin-top: -5px;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .input-group {
+      display: flex;
+      gap: var(--spacing-md);
+      align-items: flex-start;
+    }
+    
+    .input-group > * {
+      flex: 1;
+    }
+    
+    .browse-button {
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
+    
+    .site-rules-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: var(--spacing-lg);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+    }
+    
+    .site-rules-table th,
+    .site-rules-table td {
+      padding: var(--spacing-md);
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .site-rules-table th {
+      font-weight: 600;
+      color: var(--text-dark);
+      background-color: #f5f5f5;
+      font-size: 14px;
+    }
+    
+    .site-rules-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .site-rules-table tr:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .delete-rule {
+      color: var(--error-color);
+      background: none;
+      border: none;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+    }
+    
+    .delete-rule:hover {
+      background-color: rgba(244, 67, 54, 0.15);
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-radius: var(--border-radius);
+      color: white;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+    }
+    
+    .notification::before {
+      content: '';
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+    
+    .notification-success {
+      background-color: var(--success-color);
+    }
+    
+    .notification-success::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+    }
+    
+    .notification-error {
+      background-color: var(--error-color);
+    }
+    
+    .notification-error::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/%3E%3C/svg%3E");
+    }
+    
+    .notification-warning {
+      background-color: var(--warning-color);
+    }
+    
+    .notification-warning::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z'/%3E%3C/svg%3E");
+    }
+    
+    .notification-info {
+      background-color: var(--accent-color);
+    }
+    
+    .notification-info::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E");
+    }
+    
+    /* Toggle styling */
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+    
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #e4e4e4;
+      transition: .3s;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .3s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    
+    input:checked + .slider {
+      background-color: var(--primary-color);
+    }
+    
+    input:focus + .slider {
+      box-shadow: 0 0 1px var(--primary-color);
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+    
+    .slider.round {
+      border-radius: 26px;
+    }
+    
+    .slider.round:before {
+      border-radius: 50%;
+    }
+    
+    small {
+      display: block;
+      margin-top: 5px;
+      color: var(--text-light);
+      font-size: 13px;
+    }
+    
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    
+    a:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+    
+    .network-status-message {
+      background-color: rgba(0,0,0,0.03);
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-top: 8px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: var(--spacing-md);
+      }
+      
+      .header {
+        margin: -16px -16px 16px -16px;
+        padding: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .header img {
+        margin-bottom: var(--spacing-sm);
+      }
+      
+      .card {
+        padding: var(--spacing-md);
+      }
+      
+      .tab-button {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 14px;
+      }
+      
+      .network-option {
+        padding: var(--spacing-md);
+      }
+      
+      .button-row {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+      }
+      
+      button {
+        width: 100%;
+      }
+      
+      .input-group {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+      }
+      
+      .browse-button {
+        width: 100%;
+        margin-top: var(--spacing-xs);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="../icons/icon16.jpeg" alt="Shield Logo">
+      <h1>Privacy Network Settings</h1>
+    </div>
+    
+    <div class="info-box">
+      <p>Enhance your privacy and security by routing traffic through secure networks when visiting risky websites.</p>
+    </div>
+    
+    <div class="tab-navigation">
+      <button id="tab-networks" class="tab-button active">Networks</button>
+      <button id="tab-settings" class="tab-button">Settings</button>
+      <button id="tab-routing" class="tab-button">Site Routing</button>
+    </div>
+    
+    <!-- Networks Tab -->
+    <div id="networks-content" class="tab-content active">
+      <div class="card">
+        <h2>Select Privacy Network</h2>
+        <p class="section-subtitle">Choose how you want to protect your browsing on untrusted sites</p>
+        
+        <div class="network-option" id="option-direct">
+          <div class="radio-indicator"></div>
+          <h3>Direct Connection <span style="font-size: 12px; color: var(--text-light); margin-left: 8px;">(No Protection)</span></h3>
+          <p>Connect directly to websites without any privacy protection</p>
+        </div>
+        
+        <div class="network-option" id="option-tor" data-option="tor">
+          <div class="radio-indicator"></div>
+          <h3><span class="status-indicator" id="tor-status"></span>Tor Browser</h3>
+          <p>Route traffic through the Tor network for maximum anonymity (requires Tor Browser)</p>
+          
+          <div class="network-details">
+            <div class="form-group">
+              <label for="tor-path">Tor Browser Location</label>
+              <div class="input-group">
+                <input type="text" id="tor-path" placeholder="Path to Tor Browser executable" readonly>
+                <button id="browse-tor" class="secondary-btn browse-button">Browse...</button>
+              </div>
+              <small style="color: var(--text-light); display: block; margin-top: 5px;">
+                If you don't have Tor Browser installed, <a href="https://www.torproject.org/download/" target="_blank">download it here</a>.
+              </small>
+            </div>
+            
+            <div class="toggle-container">
+              <label for="auto-launch-tor">Auto-launch Tor Browser for unsafe sites</label>
+              <label class="toggle">
+                <input type="checkbox" id="auto-launch-tor" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="network-option" id="option-socks" data-option="socks">
+          <div class="radio-indicator"></div>
+          <h3><span class="status-indicator" id="socks-status"></span>SOCKS Proxy</h3>
+          <p>Use a SOCKS proxy for selected sites (works with Tor or any VPN that provides a SOCKS proxy)</p>
+          
+          <div class="network-details">
+            <div class="form-group">
+              <label for="socks-host">SOCKS Host</label>
+              <input type="text" id="socks-host" value="127.0.0.1">
+            </div>
+            
+            <div class="input-group">
+              <div class="form-group">
+                <label for="socks-port">SOCKS Port</label>
+                <input type="text" id="socks-port" value="9050">
+              </div>
+              
+              <div class="form-group">
+                <label for="socks-version">SOCKS Version</label>
+                <select id="socks-version">
+                  <option value="5">SOCKS5 (recommended)</option>
+                  <option value="4">SOCKS4</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="toggle-container">
+              <label for="socks-credentials">Use Authentication</label>
+              <label class="toggle">
+                <input type="checkbox" id="socks-credentials">
+                <span class="slider round"></span>
+              </label>
+            </div>
+            
+            <div id="socks-auth" style="display: none;">
+              <div class="input-group">
+                <div class="form-group">
+                  <label for="socks-username">Username</label>
+                  <input type="text" id="socks-username">
+                </div>
+                
+                <div class="form-group">
+                  <label for="socks-password">Password</label>
+                  <input type="password" id="socks-password">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="network-option" id="option-vpn" data-option="vpn">
+          <div class="radio-indicator"></div>
+          <h3><span class="status-indicator" id="vpn-status"></span>VPN Service</h3>
+          <p>Connect through a commercial VPN service for privacy and security</p>
+          
+          <div class="network-details">
+            <div class="form-group">
+              <label for="vpn-service">VPN Provider</label>
+              <select id="vpn-service">
+                <option value="">Select VPN Provider</option>
+                <option value="nord">NordVPN</option>
+                <option value="express">ExpressVPN</option>
+                <option value="surfshark">Surfshark</option>
+                <option value="shield">Shield VPN (Self-hosted)</option>
+                <option value="custom">Custom VPN</option>
+              </select>
+            </div>
+            
+            <div id="vpn-config-section" style="display: none;">
+              <div class="form-group">
+                <label for="vpn-app-path">VPN Application Path</label>
+                <div class="input-group">
+                  <input type="text" id="vpn-app-path" placeholder="Path to VPN executable" readonly>
+                  <button id="browse-vpn" class="secondary-btn browse-button">Browse...</button>
+                </div>
+              </div>
+              
+              <div class="input-group">
+                <div class="form-group">
+                  <label for="vpn-protocol">Protocol</label>
+                  <select id="vpn-protocol">
+                    <option value="auto">Automatic</option>
+                    <option value="openvpn">OpenVPN</option>
+                    <option value="wireguard">WireGuard</option>
+                    <option value="ikev2">IKEv2</option>
+                  </select>
+                </div>
+                
+                <div class="form-group" style="display: flex; align-items: flex-end;">
+                  <div class="toggle-container" style="margin-bottom: 0;">
+                    <label for="vpn-killswitch">Enable Kill Switch</label>
+                    <label class="toggle">
+                      <input type="checkbox" id="vpn-killswitch" checked>
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Settings Tab -->
+    <div id="settings-content" class="tab-content">
+      <div class="card">
+        <h2>General Privacy Settings</h2>
+        
+        <div class="toggle-container">
+          <label for="recommend-tor">Show secure network recommendations for medium-risk sites</label>
+          <label class="toggle">
+            <input type="checkbox" id="recommend-tor" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
+        
+        <div class="toggle-container">
+          <label for="auto-secure-high-risk">Auto-secure high-risk sites (score below 40)</label>
+          <label class="toggle">
+            <input type="checkbox" id="auto-secure-high-risk" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
+        
+        <div class="toggle-container">
+          <label for="remember-choices">Remember my choices for each site</label>
+          <label class="toggle">
+            <input type="checkbox" id="remember-choices" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
+        
+        <div class="toggle-container">
+          <label for="dns-over-https">Use DNS over HTTPS for all connections</label>
+          <label class="toggle">
+            <input type="checkbox" id="dns-over-https">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h2>Advanced Settings</h2>
+        
+        <div class="form-group">
+          <label for="dns-provider">DNS Provider</label>
+          <select id="dns-provider">
+            <option value="default">Browser Default</option>
+            <option value="cloudflare">Cloudflare (1.1.1.1)</option>
+            <option value="google">Google (8.8.8.8)</option>
+            <option value="quad9">Quad9 (9.9.9.9)</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        
+        <div id="custom-dns" style="display: none;">
+          <div class="form-group">
+            <label for="custom-dns-address">Custom DNS Server</label>
+            <input type="text" id="custom-dns-address" placeholder="e.g., 1.1.1.1">
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Routing Tab -->
+    <div id="routing-content" class="tab-content">
+      <div class="card">
+        <h2>Site-specific Privacy Rules</h2>
+        <p class="section-subtitle">Configure which sites always use specific networks</p>
+        
+        <div id="site-rules-container">
+          <!-- Rules will be generated here -->
+          <div class="info-box">
+            <p>No custom site rules yet. When you enable proxy or VPN for specific sites, they will appear here.</p>
+          </div>
+        </div>
+        
+        <div class="form-group" style="margin-top: var(--spacing-lg);">
+          <label for="new-site-rule">Add new site rule</label>
+          <div class="input-group">
+            <input type="text" id="new-site-rule" placeholder="example.com">
+            <select id="new-site-network">
+              <option value="direct">Direct</option>
+              <option value="tor">Tor Browser</option>
+              <option value="socks">SOCKS Proxy</option>
+              <option value="vpn">VPN</option>
+            </select>
+            <button id="add-site-rule" class="secondary-btn">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="button-row">
+      <button id="cancel" class="secondary-btn">Cancel</button>
+      <button id="save" class="primary-btn">Save Settings</button>
+    </div>
+  </div>
+  
+  <script src="../js/proxy-settings.js"></script>
+</body>
+</html> 

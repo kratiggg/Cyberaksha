@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "Kavach",
+  "version": "1.0",
+  "description": "Enhance your online privacy and security with ad blocking, HTTPS upgrading, and fingerprint protection",
+  "permissions": [
+    "webRequest",
+    "storage",
+    "tabs",
+    "scripting",
+    "declarativeNetRequest",
+    "proxy",
+    "notifications",
+    "browsingData",
+    "alarms"
+  ],
+  "host_permissions": [
+    "<all_urls>",
+    "https://api-lr.agent.ai/*"
+  ],
+  "background": {
+    "service_worker": "js/background.js"
+  },
+  "action": {
+    "default_popup": "pages/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.jpeg",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.jpeg",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["lib/*", "js/chatbot-service.js", "pages/proxy-settings.html", "js/proxy-settings.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://api-lr.agent.ai https://*.agent.ai;"
+  },
+  "options_page": "pages/dashboard.html"
+} 

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Copy Helper</title>
+  <script>
+    // Listen for messages from background script
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      if (message.action === 'copyToClipboard' && message.text) {
+        copyToClipboard(message.text);
+        sendResponse({ success: true });
+        
+        // Close this document after copy is complete
+        setTimeout(() => {
+          chrome.runtime.sendMessage({ action: 'closeOffscreenDocument' });
+        }, 500);
+      }
+    });
+    
+    // Function to copy text to clipboard
+    function copyToClipboard(text) {
+      try {
+        // Create a temporary textarea element
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        
+        // Make the textarea out of viewport
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-999999px';
+        textarea.style.top = '-999999px';
+        
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        
+        // Execute copy command
+        document.execCommand('copy');
+        
+        // Clean up
+        document.body.removeChild(textarea);
+        console.log('Text copied to clipboard:', text);
+      } catch (error) {
+        console.error('Failed to copy text:', error);
+      }
+    }
+  </script>
+</head>
+<body>
+  <!-- This page is used for clipboard operations and is not visible to users -->
+</body>
+</html> 

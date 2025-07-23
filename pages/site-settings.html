@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shield - Site Settings</title>
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/site-settings.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <header class="dashboard-header">
+      <div class="logo">
+        <img src="../icons/icon16.jpeg" alt="Logo">
+        <h1>Cyberaksha Site Settings</h1>
+      </div>
+      <div class="site-header-info">
+        <h2 id="site-domain">example.com</h2>
+        <div class="site-safety-indicator">
+          <div class="safety-score-display">
+            <svg viewBox="0 0 36 36" class="safety-score-ring">
+              <path class="score-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+              <path id="safety-score-path" class="score-fill" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+            </svg>
+            <span id="safety-score">--</span>
+          </div>
+          <span id="safety-label">Safety Score</span>
+        </div>
+      </div>
+    </header>
+    
+    <div class="dashboard-content">
+      <section class="settings-panel">
+        <div class="settings-header">
+          <h2>Custom Protection for This Site</h2>
+          <p>These settings override your global settings for this specific site.</p>
+        </div>
+        
+        <div class="settings-section">
+          <h3>Content Protection</h3>
+          <div class="setting-item">
+            <div class="setting-info">
+              <h4>Allow Ads on This Site</h4>
+              <p>Allow advertisements to load on this site (whitelist)</p>
+            </div>
+            <label class="toggle large">
+              <input type="checkbox" id="allowAds">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          
+          <div class="setting-item">
+            <div class="setting-info">
+              <h4>Allow Trackers on This Site</h4>
+              <p>Allow tracking scripts to load on this site (whitelist)</p>
+            </div>
+            <label class="toggle large">
+              <input type="checkbox" id="allowTrackers">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          
+          <div class="setting-item">
+            <div class="setting-info">
+              <h4>Block JavaScript</h4>
+              <p>Disable JavaScript execution on this site</p>
+            </div>
+            <label class="toggle large">
+              <input type="checkbox" id="blockJavaScript">
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="settings-section">
+          <h3>Site Information</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">HTTPS Status:</span>
+              <span id="https-status" class="info-value">Secure</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Trackers Detected:</span>
+              <span id="trackers-count" class="info-value">0</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Mixed Content:</span>
+              <span id="mixed-content" class="info-value">None</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Cookies:</span>
+              <span id="cookies-count" class="info-value">0</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="settings-section site-history-section">
+          <h3>Protection History</h3>
+          <div class="history-list" id="site-history">
+            <!-- Will be populated by JavaScript -->
+            <div class="history-item placeholder">
+              <p>No protection history for this site yet</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="settings-actions">
+          <button id="save-site-settings" class="btn primary large">Save Site Settings</button>
+          <button id="clear-site-data" class="btn warning">Clear Site Data</button>
+          <button id="reset-site-settings" class="btn secondary">Reset to Defaults</button>
+        </div>
+      </section>
+    </div>
+    
+    <footer class="dashboard-footer">
+      <p>Shield Privacy Extension v1.0</p>
+      <button id="back-to-dashboard" class="btn secondary">Back to Dashboard</button>
+    </footer>
+  </div>
+  
+  <script src="../js/site-settings.js"></script>
+</body>
+</html> 

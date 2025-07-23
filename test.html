@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Safety Score Test</title>
+    <script src="js/chatbot-service.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        button {
+            padding: 8px 16px;
+            margin: 5px;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Safety Score Test</h1>
+    
+    <button id="test1">Test Google.com</button>
+    <button id="test2">Test Example.xyz</button>
+    <button id="test3">Test Current URL</button>
+    
+    <div id="result">Results will appear here</div>
+    
+    <script>
+        document.getElementById('test1').addEventListener('click', () => {
+            testSafetyScore('https://www.google.com');
+        });
+        
+        document.getElementById('test2').addEventListener('click', () => {
+            testSafetyScore('https://example.xyz');
+        });
+        
+        document.getElementById('test3').addEventListener('click', () => {
+            testSafetyScore(window.location.href);
+        });
+        
+        function testSafetyScore(url) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<p>Testing safety score for: ${url}</p>`;
+            
+            chrome.runtime.sendMessage({
+                action: "calculateSafetyScore",
+                url: url
+            }, response => {
+                if (response && response.score !== undefined) {
+                    resultDiv.innerHTML += `<p>Safety Score: ${response.score}</p>`;
+                    
+                    // Get detailed components
+                    const domain = new URL(url).hostname;
+                    chrome.runtime.sendMessage({
+                        action: "getLastScoreComponents",
+                        domain: domain
+                    }, componentsResponse => {
+                        if (componentsResponse && componentsResponse.success) {
+                            resultDiv.innerHTML += `<p>Score Components:</p>`;
+                            resultDiv.innerHTML += `<pre>${JSON.stringify(componentsResponse.components, null, 2)}</pre>`;
+                        } else {
+                            resultDiv.innerHTML += `<p>Failed to get score components: ${componentsResponse?.error || 'Unknown error'}</p>`;
+                        }
+                    });
+                } else {
+                    resultDiv.innerHTML += `<p>Error getting safety score: ${response?.error || 'Unknown error'}</p>`;
+                }
+            });
+        }
+    </script>
+</body>
+</html> 
